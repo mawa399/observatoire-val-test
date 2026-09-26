@@ -1,0 +1,17 @@
+id;objet_teste;etape;resultat_attendu;resultat_obtenu;statut;commentaire
+R01;Chargement;Compter les lignes de source.ventes;341;;;
+R02;Qualité;Nombre total d'anomalies sur source.ventes;38;;;
+R03;Qualité;Géométries invalides dans source.zones_projet;1 (Z04);;;
+R04;Nettoyage;Compter les lignes de travail.ventes;334;;;
+R05;Nettoyage;Ventes de l'ancienne commune 35907 rattachées à 35905;30;;;
+R06;Indicateur;Prix médian 2025 de Bourg-Test (35901);4 126 €/m²;;;
+R07;Indicateur;Taux de logements sociaux 2025 de Bourg-Test;25,4 %;;;
+R08;Indicateur;Communes concernées par la zone Z04;Bourg-Test, Saint-Donnée;;;
+R09;Performance;EXPLAIN ANALYZE de la jointure communes/ventes;Index Scan sur ventes_geom_idx;;;
+R10;WMS;GetMap sur vt:indic_prix_commune;Image PNG avec 4 classes de couleur;;;
+R11;WFS;GetFeature JSON avec CQL_FILTER=annee=2025;6 objets;;;
+R12;Vue SQL;viewparams=annee:2022 puis annee:2025;Couleurs différentes selon l'année;;;
+R13;Vue SQL;viewparams=annee:abcd;Requête refusée par la validation;;;
+R14;WMTS;Couche en cache affichée dans QGIS;Tuiles affichées rapidement;;;
+R15;Sécurité;WFS sur vt:ventes sans être connecté;Accès refusé;;;
+R16;API REST;Relancer publier_geoserver.py une 2e fois;Aucune erreur, éléments « déjà présents »;;;

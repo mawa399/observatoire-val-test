@@ -1,0 +1,45 @@
+# Environnement local : PostGIS + GeoServer (+ GDAL pour ogr2ogr)
+# Lancer : docker compose up -d
+services:
+  postgis:
+    image: postgis/postgis:16-3.4
+    container_name: vt_postgis
+    environment:
+      POSTGRES_DB: observatoire
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./:/kit            # le kit est visible dans le conteneur sous /kit
+
+  geoserver:
+    image: docker.osgeo.org/geoserver:2.28.2
+    container_name: vt_geoserver
+    environment:
+      SKIP_DEMO_DATA: "true"
+      CORS_ENABLED: "true"
+      GEOSERVER_ADMIN_USER: admin
+      GEOSERVER_ADMIN_PASSWORD: geoserver
+    ports:
+      - "8080:8080"
+    volumes:
+      - gsdata:/opt/geoserver_data
+    depends_on:
+      - postgis
+
+  gdal:                    # outil ponctuel : docker compose run --rm gdal ...
+    image: ghcr.io/osgeo/gdal:ubuntu-small-latest
+    profiles: ["outils"]
+    working_dir: /kit
+    volumes:
+      - ./:/kit
+    environment:
+      PGHOST: postgis
+    depends_on:
+      - postgis
+
+volumes:
+  pgdata:
+  gsdata:
