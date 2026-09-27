@@ -1,0 +1,4 @@
+TRUNCATE source.ventes, source.logements_sociaux, ref.passage_cog;
+\copy source.ventes FROM 'C:/Users/User/Desktop/Formation_Data_Engineer_SIG_ALS/kit-val-test/data/ventes.csv' WITH (FORMAT csv, HEADER, DELIMITER ';', NULL '', ENCODING 'UTF8')
+\copy source.logements_sociaux FROM 'C:/Users/User/Desktop/Formation_Data_Engineer_SIG_ALS/kit-val-test/data/logements_sociaux.csv' WITH (FORMAT csv, HEADER, DELIMITER ';', NULL '', ENCODING 'UTF8')
+\copy ref.passage_cog FROM 'C:/Users/User/Desktop/Formation_Data_Engineer_SIG_ALS/kit-val-test/data/passage_cog.csv' WITH (FORMAT csv, HEADER, DELIMITER ';', NULL '', ENCODING 'UTF8')
