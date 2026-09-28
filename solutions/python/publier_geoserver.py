@@ -1,8 +1,10 @@
 """
 Étape 8 : publier automatiquement les couches du Val Test via l'API REST de GeoServer.
 
-Usage :
+Usage (PowerShell, depuis le dossier kit-val-test) :
     pip install requests
+    $env:GS_USER = "admin"                 # ton utilisateur GeoServer
+    $env:GS_PASSWORD = "ton-mot-de-passe"  # jamais écrit dans le code
     python solutions/python/publier_geoserver.py
 
 Le script est rejouable : ce qui existe déjà est ignoré.
@@ -48,8 +50,8 @@ def creer_store():
         print(f"Store {STORE} : déjà présent")
         return
     params = {
-        "host": "postgis",            # nom du service Docker, pas localhost
-        "port": "5432",
+        "host": "localhost",          # GeoServer et PostgreSQL sur le même PC
+        "port": "5432",               # adapte si ton PostgreSQL utilise un autre port
         "database": "observatoire",
         "schema": "diffusion",
         "user": "geoserver_ro",
