@@ -47,3 +47,33 @@ SET code_insee = c.insee
 FROM ref.communes c
 WHERE ST_Intersects(c.geom, v.geom)
   AND c.insee <> v.code_insee;
+
+
+-- =========================================================
+-- 5.3 a. Zones de projet avec géométries réparées
+-- =========================================================
+DROP TABLE IF EXISTS travail.zones_projet;
+
+CREATE TABLE travail.zones_projet AS
+SELECT id_zone, nom, type_zone, nb_logements_prevus,
+       ST_Multi(ST_CollectionExtract(ST_MakeValid(geom), 3))::geometry(MultiPolygon, 2154) AS geom
+FROM source.zones_projet;
+
+ALTER TABLE travail.zones_projet ADD PRIMARY KEY (id_zone);
+CREATE INDEX ON travail.zones_projet USING GIST (geom);
+
+-- =========================================================
+-- 5.3 b. Logements sociaux ramenés au COG 2026
+-- =========================================================
+DROP TABLE IF EXISTS travail.logements_sociaux;
+
+CREATE TABLE travail.logements_sociaux AS
+SELECT l.annee,
+       COALESCE(p.code_nouveau, l.code_insee) AS code_insee,
+       sum(l.nb_residences_principales)       AS nb_residences_principales,
+       sum(l.nb_logements_sociaux)            AS nb_logements_sociaux
+FROM source.logements_sociaux l
+LEFT JOIN ref.passage_cog p ON p.code_ancien = l.code_insee
+GROUP BY 1, 2;
+
+ALTER TABLE travail.logements_sociaux ADD PRIMARY KEY (annee, code_insee);
